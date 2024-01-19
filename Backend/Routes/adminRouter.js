@@ -12,6 +12,7 @@ const imageUpload = require("../Middlewares/imageUpload/imageUpload");
 router.use(express.json())
 router
 .post("/login",tryCatchMiddleware(admin.login))
+
 //apk middleware  start
 // apk middleware  end
 
@@ -23,7 +24,7 @@ router
 .delete("/products",tryCatchMiddleware(admin.deleteProduct))
 .put("/products", tryCatchMiddleware(admin.updateProduct))
 .get("/orders",tryCatchMiddleware(admin.orderDtails))
-.use(verifyToken)
+// .use(verifyToken)
 
 
 

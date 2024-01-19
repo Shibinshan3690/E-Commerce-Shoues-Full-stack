@@ -88,15 +88,16 @@ const Order=require("../Models/orederSchema")
 
 const  createProduct= async (req, res) => {
     // console.log('.....')
+    // console.log('aaaaaaaaa');
     const { value, error } = joiProductSchema.validate(req.body);
-    console.log('Received request with data:', req.body);
     // console.log(value)
     const { title, description, price, image, category } = value;
-    console.log(value)
+    // console.log(value)
     if (error) {
         return res.status(400).json({ error: error.details[0].message });
     } else {
         try {
+           
             // Assuming 'products' is your model or schema
             const createdProduct = await products.create({
                 title,    
@@ -149,7 +150,7 @@ const allProducts = async (req, res) => {
 };
  //Product by id 
      const  productsById=async(req,res)=>{
-            productId=req.params.id;
+        const  productId=req.params.id;
             const product= await products.findById(productId);
             if(!product){
                 res.status(404).send({
@@ -164,21 +165,19 @@ const allProducts = async (req, res) => {
             })
      }
 //Delete Product
-  const deleteProduct=async(req,res)=>{
-          const {productId}=req.body;
-          console.log(productId)
+ const deleteProduct= async (req, res) => {
+    const { productId } = req.body;
+    console.log("product",productId)
+    
+  
+    const deletePro = await products.findByIdAndDelete(productId); 
+  console.log(deletePro,'delete')
+    res.status(200).json({
+      status: "success", 
+      message: "Product successfully deleted",
+    });
+  }   
 
-          if(!productId||!mongoos.Types.ObjectId.isValid(productId)){
-                   return res.status(400).json({
-                   status:"failer",
-                   message:'invalid ProducID provaided'
-       })
-        }
-        return res.status(200).json({
-                  status:"succes",
-                  message:'Product deleted succesfully'
-        })
-}
  // admin update product
     const updateProduct = async (req, res) => {
     const { value, error } = joiProductSchema.validate(req.body);
