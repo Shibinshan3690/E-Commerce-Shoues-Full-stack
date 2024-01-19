@@ -1,33 +1,56 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { BsFillCartFill } from 'react-icons/bs';
 import Sidebar from '../Admin-section/Sidebar-section/Sidebar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const ProductsAdmin = () => {
   const navigate = useNavigate();
-  const [product,setProduct]=useState([])
+  const [product,setProduct]=useState([]);
+  
+ 
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/admin/products');
+      setProduct(response.data.data); // Assuming the product data is in the 'data' field of the response
+    } catch (error) {
+      console.error('Error fetching products:', error.message);
+    }
+  };
 
   // Fetch products from the server when the component mounts
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/admin/products');
-        console.log(response.data.data);
-        setProduct(response.data.data); // Assuming the product data is in the 'data' field of the response
-      } catch (error) {
-        console.error('Error fetching products:', error.message);
-      }
-    };
+   
 
     fetchProducts();
-  }, [setProduct]);
+  }, [setProduct]); 
 
   // Remove the product
-  const handleRemove = (id) => {
-    const updatedCart = product.filter((item) => item.id !== id);
-    setProduct(updatedCart);
-  };
+  const handleRemove=async(productId)=>{
+    try {
+     const response = await axios.delete("http://localhost:5000/api/admin/products",{
+      data: { productId }, 
+    })
+ 
+    if(response){
+      toast.success("Poduct deleted")
+      fetchProducts();
+    }
+    } catch (error) {
+      console.log(error)
+        toast.error(error.message || "Failed to fetch products")
+    }
+
+  }
+ 
+  
+
+
+
+    // const updatedCart = product.filter((item) => item.id !== id);
+    // setProduct(updatedCart);
+ 
 
   return (
     <>
@@ -60,7 +83,7 @@ const ProductsAdmin = () => {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleRemove(item.id)}
+                   onClick={()=>handleRemove(item._id)}
                     className="btn btn-danger"
                     style={{ marginLeft: '10px' }}
                   >

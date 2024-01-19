@@ -7,39 +7,37 @@ import { toast } from 'react-toastify';
 const Login = () => {
   const navigate = useNavigate();
 
+
   const handleLogin = async (e) => {
-    e.preventDefault();
-    const username = e.target.username.value.trim().toLowerCase();
-    const password = e.target.password.value.trim();
-    
-    // console.log(username,"usernamee")
-    const adminUserName = "admin";
-
-      if (username === "" || password === "") {
-        toast.error("Enter all inputs");
-        return;
-      }
-
-    let url = "http://localhost:5000/api/user/login";
-
-    if (username === adminUserName) {
-      url = "http://localhost:5000/api/admin/login";
+  e.preventDefault();
+  
+  const username = e.target.username.value.trim().toLowerCase();
+  const password = e.target.password.value.trim();
+  // console.log(username,"usernamee")
+  const adminUserName = "admin";
+  if (username === "" || password === "") {
+  toast.error("Enter all inputs");
+  return;
+  }
+  let url = "http://localhost:5000/api/user/login";
+  if (username === adminUserName) {
+  url = "http://localhost:5000/api/admin/login";
     }
 
-    try {
+  try {
       const payload = { username, password };
       const response = await axios.post(url, payload);
       console.log(response)
       if (response.status === 200) {
         username !== adminUserName && localStorage.setItem("userId", response.data.user._id);
-        
+
         username === adminUserName && localStorage.setItem("role", "admin");
         localStorage.setItem("jwt", response.data.data);
-        console.log(response.data.data)
-        console.log(response.data.username)
+        // console.log(response.data.data)
+        // console.log(response.data.username)
         localStorage.setItem("userName", response.data.user.username);
-          console.log(response.data.username)
-
+        console.log(response.data.username)
+        
         if (username === adminUserName) {
           navigate("/");
           toast.success("Login successful");
