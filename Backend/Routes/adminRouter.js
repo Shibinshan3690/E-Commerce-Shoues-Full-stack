@@ -17,13 +17,13 @@ router
 
 .get("/users",tryCatchMiddleware(admin.allUsers))
 .get("/user/:id", tryCatchMiddleware(admin.findById))
-.use(verifyToken)
 .post("/createProduct",imageUpload, tryCatchMiddleware(admin.createProduct))
 .get("/products", tryCatchMiddleware(admin.allProducts))
 .get("/products/:id",tryCatchMiddleware(admin.productsById))
 .delete("/products",tryCatchMiddleware(admin.deleteProduct))
 .put("/products", tryCatchMiddleware(admin.updateProduct))
 .get("/orders",tryCatchMiddleware(admin.orderDtails))
+.use(verifyToken)
 
 
 

@@ -92,7 +92,7 @@ const  createProduct= async (req, res) => {
     console.log('Received request with data:', req.body);
     // console.log(value)
     const { title, description, price, image, category } = value;
-    // console.log(value)
+    console.log(value)
     if (error) {
         return res.status(400).json({ error: error.details[0].message });
     } else {
