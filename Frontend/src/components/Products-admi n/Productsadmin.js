@@ -24,7 +24,7 @@ const ProductsAdmin = () => {
    
 
     fetchProducts();
-  }, [setProduct]); 
+  }, []); 
 
   // Remove the product
   const handleRemove=async(productId)=>{
@@ -79,7 +79,7 @@ const ProductsAdmin = () => {
                   <img src={item.image} alt={item.image} style={{ width: '100px' }} />
                 </td>
                 <td>
-                  <button onClick={() => navigate(`/adminedit/${item.id}`)} className="btn btn-secondary">
+                  <button onClick={() => navigate(`/adminedit/${item._id}`)} className="btn btn-secondary">
                     Edit
                   </button>
                   <button

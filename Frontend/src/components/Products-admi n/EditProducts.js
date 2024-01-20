@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -8,7 +8,7 @@ const EditProducts = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState({
-    id: "",
+    _id: "",
     title: "",
     image: "",
     description: "",
@@ -20,7 +20,6 @@ const EditProducts = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/admin/products/${id}`);
-        console.log(response.data.product);
         const { _id, title, image, price, description, category } = response.data.product;
         setProduct({
           id: _id,
@@ -30,22 +29,23 @@ const EditProducts = () => {
           category,
           description,
         });
-      } catch (error) {
+      } catch (error){
         console.log(error);
         toast.error(error.message || "Failed to fetch products");
       }
     };
     fetchProduct();
-  }, [id]);
+  }, []);
 
   const submit = async (e) => {
     e.preventDefault();
+    
     try {
-      const response = await axios.put(`http://localhost:5000/api/admin/products/${id}`, product);
-      console.log(response);
+      const response = await axios.put(`http://localhost:5000/api/admin/products`,product );
+      
       if (response.status === 200) {
         toast.success("Product Edited Successfully");
-        navigate('/adminproduct');
+        navigate('/products');
       }
     } catch (error) {
       console.log(error);
