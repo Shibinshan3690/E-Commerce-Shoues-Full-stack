@@ -4,7 +4,9 @@ const products=require("../Models/productSchema");
 const jwt=require("jsonwebtoken");
 const {joiProductSchema}=require("../Models/validationSchema");
 const Users=require("../Models/userSchema");
-const Order=require("../Models/orederSchema")
+const Order=require("../Models/orederSchema");
+const { default: mongoose } = require("mongoose");
+const productSchema = require("../Models/productSchema");
 
 
 
@@ -151,23 +153,28 @@ const allProducts = async (req, res) => {
  //Product by id 
      const  productsById=async(req,res)=>{
         const  productId=req.params.id;
-            const product= await products.findById(productId);
-            if(!product){
-                res.status(404).send({
-                       status:"error",
-                       message:'Prioduct not fount'
+            if(!mongoose.Types.ObjectId.isValid(productId)){
+                  return  res.status(400).json({
+                       status:"fail",
+                       message:"inValid Id format"
                   })
             }
-            res.status(200).json({
-                 status:"success",
-                 message:'Succeful fetched product details',
-                 data:product
+             const product=await productSchema.findById(productId);
+             if(!product){
+                return res.status(404).json({
+                    status:'fail',   
+                    message:'product not found'
+                })
+             }
+             res.status(200).json({
+                status:'success',
+                message:'successfully fetched data',
+                product:product
             })
      }
 //Delete Product
  const deleteProduct= async (req, res) => {
     const { productId } = req.body;
-    console.log("product",productId)
     
   
     const deletePro = await products.findByIdAndDelete(productId); 
@@ -181,7 +188,7 @@ const allProducts = async (req, res) => {
  // admin update product
     const updateProduct = async (req, res) => {
     const { value, error } = joiProductSchema.validate(req.body);
-    console.log(value);
+    console.log(req.body,'body');
     if (error) {
     return res.status(400).json({ message: error.details[0].message });
     }
@@ -210,6 +217,7 @@ const allProducts = async (req, res) => {
     res.status(200).json({
       status: "Success",
       message: "Product successfully updated",
+      data: product
     });
   };
   

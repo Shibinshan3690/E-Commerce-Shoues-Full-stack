@@ -24,7 +24,7 @@ router
 .delete("/products",tryCatchMiddleware(admin.deleteProduct))
 .put("/products", tryCatchMiddleware(admin.updateProduct))
 .get("/orders",tryCatchMiddleware(admin.orderDtails))
-// .use(verifyToken)
+.use(verifyToken)
 
 
 
