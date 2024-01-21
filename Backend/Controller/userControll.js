@@ -101,11 +101,10 @@ viewProduct:async(req,res)=>{
        });
 },
  //  View a specific product.
- productById: async (req, res) => {
-  const productId = req.params.id;
-  const prod = await Products.findById(productId);
-
-  if (!prod) {
+    productById: async (req, res) => {
+    const productId = req.params.id;
+    const prod = await Products.findById(productId);
+     if (!prod) {
     return res.status(404).json({
       status: "error",
       message: "Product not found",
@@ -181,6 +180,35 @@ viewCartProdut: async(req,res)=>{
   });
 // console.log(Products);
 },
+ // backend code
+deleteCart: async (req, res) => {
+  const userId = req.params.id;
+  const { productId } = req.body;
+
+  try {
+      if (!productId) {
+          return res.status(404).json({ status: 'fail', message: 'Product not found' });
+      }
+
+      const user = await User.findById(userId);
+
+      if (!user) {
+          return res.status(404).json({ status: 'fail', message: 'User not found' });
+      }
+
+      const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { $pull: { cart: productId } },
+          { new: true }
+      );
+
+      res.status(200).json({ status: 'success', message: 'Successfully removed product', user: updatedUser });
+  } catch (error) {
+      console.error("Error removing the product", error);
+      res.status(500).json({ status: 'error', message: 'Internal server error' });
+  }
+},
+  
 
 //ADD PRoduct Wisilist
 
