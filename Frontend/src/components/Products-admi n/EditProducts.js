@@ -20,6 +20,7 @@ const EditProducts = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/admin/products/${id}`);
+        // console.log(response,'adminedit')
         const { _id, title, image, price, description, category } = response.data.product;
         setProduct({
           id: _id,
@@ -33,9 +34,10 @@ const EditProducts = () => {
         console.log(error);
         toast.error(error.message || "Failed to fetch products");
       }
+     
     };
     fetchProduct();
-  }, []);
+  }, [id]);
 
   const submit = async (e) => {
     e.preventDefault();

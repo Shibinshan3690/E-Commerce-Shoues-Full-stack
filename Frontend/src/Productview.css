@@ -1,0 +1,38 @@
+
+.product-card{
+      height: 100px;
+      width: 100px;
+}
+  
+  .product-card:hover {
+    transform: scale(1.05);
+  }
+  
+
+  
+  .product-body {
+    padding: 1rem;
+  }
+  
+  .product-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .star {
+    color: gold;
+  }
+  
+  .product-price {
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 10px;
+    margin-left: -9px;
+  }
+  
+  .product-button {
+    width: 12rem;
+    background-color: black;
+    font-weight: 600;
+  }
+  

@@ -10,7 +10,7 @@ import { Product } from './components/Product';
 import Productview from './Productview';
 import Login from './Login/Login';
 import Registration from './components/Registration';
-import Cart from "./components/Cart/Cart";
+import Cart from "./components/Cart -wisilist/Cart";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Admin from './components/Admin-section/Admin';
@@ -21,6 +21,7 @@ import AddProduct from './components/Products-admi n/AddProduct';
 import DashboardAdmin from './components/Products-admi n/DashboardAdmin';
 import AdminLogin from './components/Admin-section/AdminLogin';
 import axios from 'axios'
+import Wislist from './components/Cart -wisilist/Wislist';
 // import { create } from '../../../Backend/Models/productSchema';
 
 
@@ -80,6 +81,8 @@ const [user,setUser]=useState([]);
       <Route path='/Costomers' element={<CostomersAdmin/>}></Route>
       <Route path='/addproduct' element={<AddProduct/>}></Route>
       <Route path='/dashboard' element={<DashboardAdmin/>}></Route>
+      <Route path="/Wisilist" element={<Wislist/>}></Route>
+
      
  
      </Routes>

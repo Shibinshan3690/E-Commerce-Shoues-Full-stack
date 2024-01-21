@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-
+import { FaHeart } from "react-icons/fa";
 import {  useNavigate } from "react-router";
 import { BsFillCartFill } from "react-icons/bs";
 import { CgLogOut } from "react-icons/cg";
@@ -86,6 +86,12 @@ const NavigationBar = () => {
                   <BsFillCartFill className="ml-3"   /> 
                 <sup className="icon-cart">{cart.length}</sup>
                 </Nav.Link>
+                
+                <Nav.Link style={{ fontSize: "27px", color: "white" }} onClick={()=>navagate('/Wisilist')}>
+                  <FaHeart className="ml-3"   /> 
+                <sup className="icon-cart">{cart.length}</sup>
+                </Nav.Link>
+                
 
                 {login?   
                 ( <Nav.Link

@@ -1,91 +1,90 @@
-import React, { useContext } from "react";
-import { userContext } from "./App";
-import {  useNavigate, useParams } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { Button, Card, Container } from "react-bootstrap";
 import NavigationBar from "./components/NavigationBar";
 import { Footer } from "./components/Footer";
 import { toast } from "react-toastify";
-import "../src/components/Cart/Product.css"
+import axios from "axios";
+import "./Productview.css"; 
 
 const Productview = () => {
-  const navagate = useNavigate();
-  const { product } = useContext(userContext);
+  const [product, setProduct] = useState('');
   const { id } = useParams();
-  const products = product.filter((item) => item.id === parseInt(id));
+  const userId=localStorage.getItem("userId")
+  console.log(userId);
 
-  //Add to cart//
-
-  const { cart, setCart, login } = useContext(userContext);
-  const myCart = () => {
-    if (login) {
-      const [newData] = products;
-  
-    
-      const duplicate = cart.find((item) => item.id === newData.id);
-  
-      if (duplicate) {
-        toast.warning("Product already existed in the cart");
-      } else {
-        setCart((prevState) => [...prevState, newData]);
-        toast.success("Product Added to Cart");
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/admin/products/${id}`);
+        // console.log(response,'adminedit')
+        const { _id, title, image, price, description, category } = response.data.product;
+        setProduct({
+          id: _id,
+          title,
+          image,
+          price,
+          category,
+          description,
+        });
+      } catch (error){
+        console.log(error);
+        toast.error(error.message || "Failed to fetch products");
       }
-    } else {
-      toast.warning("Please Login");
-      navagate("/login");
-    }
-  };
-  
+     
+    };
+    fetchProduct();
+  }, [id]);
+
+
+  const handleAddToCart=async()=>{
+            try{
+                 const response = await axios.post(`http://localhost:5000/api/user/${userId}/cart`,{producId:id})
+                  // console.log(response)
+                 if(response){
+                 await axios.get(`http://localhost:5000/api/user/${userId}/cart`)
+                   console.log(userId,"nsdncsjn")
+                 return toast.success("product added to cart")
+               }
+            }catch(error){
+            console.log("Error adding product to the cart",error);
+            toast.error(error.response.data.message)
+            }
+            }
 
   return (
     <>
       <NavigationBar />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       <Container>
         <div className="row justify-content-center">
-          {products.map((item) => (
-            <Card style={{ width: "30rem" }} className="p-3 m-3">
+          {/* Use optional chaining to avoid errors if product is not yet fetched */}
+          {product && (
+            <Card  style={{ width: "30rem" }} className="p-3 m-3" key={product._id}>
               <Card.Img
                 variant="top"
-                src={item.img}
-                style={{ width: "11rem", height: "7rem" }}
+                src={product.image}
+          
+                style={{ width: "28rem", height: "17rem" }}
               />
               <Card.Body>
-                <Card.Title>{item.title}</Card.Title>
+                <Card.Title>{product.title}</Card.Title>
                 <Card.Text>
-                  {Array(item.star)
+                  
+                  {Array(product.star)
                     .fill(null)
                     .map((_, index) => (
                       <span key={index} className="star">
-                        {item.star}
-                        {item.star}
-                        {item.star}
+                        ★★★★
                       </span>
                     ))}
                 </Card.Text>
-                <span
-                  style={{ fontSize: "30px", fontWeight: 600, padding: "10px" }}
+                <span  className="product-price " 
+                  style={{ fontSize: "30px", fontWeight: 600, padding: "10px" ,marginLeft:"-9px" }}
                 >
-                  {" "}
-                  $ {item.newPrice}
+                  $ {product.price}
                 </span>
                 <Button
-                  onClick={myCart}
+                onClick={handleAddToCart}
                   variant="primary"
                   style={{
                     width: "12rem",
@@ -97,10 +96,10 @@ const Productview = () => {
                 </Button>
               </Card.Body>
             </Card>
-          ))}
+          )}
         </div>
-      </Container> 
-       <Footer />
+      </Container>
+      <Footer />
     </>
   );
 };
